@@ -2,7 +2,9 @@ import React from "react";
 import styles from "./Products.module.css";
 import { popularProducts } from "../../data";
 
-export default function Products() {
+export default function Products(cat, filters, sort) {
+  console.log(cat, filters, sort);
+
   return (
     <>
       <div className="container-fluid">

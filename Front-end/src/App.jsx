@@ -28,7 +28,7 @@ function App() {
           element: <Cart />,
         },
         {
-          path: "productList",
+          path: "productList/:category",
           element: <ProductList />,
         },
         {
