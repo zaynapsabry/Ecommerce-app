@@ -6,7 +6,7 @@ import Footer from "../Footer/Footer";
 export default function Layout({ userData, setuserData }) {
   let navigate = useNavigate();
   function logout() {
-    localStorage.removeItem("Token");
+    localStorage.removeItem("userToken");
     setuserData(null);
     navigate("/login");
   }

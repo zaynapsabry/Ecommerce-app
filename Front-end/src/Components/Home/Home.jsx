@@ -1,15 +1,16 @@
 import React from "react";
+import Announcement from "../Announcement/Announcement";
 import MainSlider from "../MainSlider/MainSlider";
-import ProductSlider from "../ProductSlider/ProductSlider";
-
-import CategorySlider from "../CategorySlider/CategorySlider";
+import Categories from "../Categories/Categories";
+import Products from "../Products/Products";
 
 export default function Home() {
   return (
     <>
+      <Announcement />
       <MainSlider />
-      <CategorySlider />
-      <ProductSlider />
+      <Categories />
+      <Products />
     </>
   );
 }

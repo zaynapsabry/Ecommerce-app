@@ -23,9 +23,9 @@ export default function Register() {
       .catch((error) => {
         console.log(error);
         setisLoading(false);
-        setmessageError(`${error.message}`);
+        setmessageError(`${error.response.statusText}`);
       });
-    // console.log(response);
+    console.log(response);
     if (response.status === 201) {
       setisLoading(false);
       navigate("/login");
