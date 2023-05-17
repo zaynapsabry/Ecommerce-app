@@ -5,10 +5,14 @@ const jwt = require('jsonwebtoken');
 
 // Register
 router.post("/register", async (req, res) => {
+  const user = await User.findOne({email:req.body.email});
+  if (user){
+    return res.status(409).json('this user already exists');
+  }
   // create newUser
   const newUser = new User({
     // extract user data from the body
-    username: req.body.username,
+    name: req.body.username,
     email: req.body.email,
     password: CryptoJS.AES.encrypt(
       req.body.password,
@@ -28,8 +32,12 @@ router.post("/register", async (req, res) => {
 // Login
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.body.username });
-    !user && res.status(401).json("Wrong credentials!");
+    const user = await User.findOne({ email: req.body.email });
+    if(!user){
+      const error = new Error("Wrong credentials!");
+      error.statusCode = 401;
+      throw error;
+    } 
 
     const hashedPassword = CryptoJS.AES.decrypt(
       user.password,
@@ -37,8 +45,12 @@ router.post("/login", async (req, res) => {
     );
     const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
-    originalPassword != req.body.password &&
-    res.status(401).json("Wrong credentials!");
+    if(originalPassword != req.body.password ){
+      const error = new Error("Wrong credentials!.");
+      error.statusCode = 401;
+      throw error;
+    }
+    
     // separate password from user information
     const accessToken = jwt.sign({
       id: user._id,

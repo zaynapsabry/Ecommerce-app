@@ -23,13 +23,13 @@ export default function Register() {
       .catch((error) => {
         console.log(error);
         setisLoading(false);
-        // setmessageError(`${error.response.message}`);
+        setmessageError(`${error.message}`);
       });
-    console.log(response);
-    // if (response.message === "success") {
-    //   setisLoading(false);
-    //   navigate("/login");
-    // }
+    // console.log(response);
+    if (response.status === 201) {
+      setisLoading(false);
+      navigate("/login");
+    }
   }
 
   let validationSchema = Yup.object({

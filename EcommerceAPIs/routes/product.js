@@ -1,4 +1,6 @@
 const Product = require("../models/Product");
+const Category = require('../models/Category');
+
 const {
     verifyToken,
     verifyTokenAndAuthorization, 
@@ -21,7 +23,7 @@ router.post("/", verifyTokenAndAdmin, async (req, res)=>{
 //Update Product
 router.put("/:id", verifyTokenAndAdmin, async (req, res, next)=>{
     try {
-        const updatedProduct = await User.findByIdAndUpdate(
+        const updatedProduct = await Product.findByIdAndUpdate(
             req.params.id, {
                 $set: req.body,
             },
@@ -46,7 +48,7 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) =>{
 //Get Product
 router.get("/find/:id", async (req, res) =>{
     try {
-        const product = await User.findById(req.params.id);
+        const product = await Product.findById(req.params.id);
         res.status(200).json(product);
     } catch (error) {
         res.status(500).json(error);
@@ -55,18 +57,16 @@ router.get("/find/:id", async (req, res) =>{
 
 //Get All Products
 router.get("/", async (req, res) =>{
-    const queryNew = req.query.new;
-    const queryCategory = req.query.category;
+    const querySort = req.query.sort;
+    console.log(querySort);
     try {
         let products;
-        if(queryNew){
-            products = await Product.find().sort({ createdAt: -1 }).limit(1);
-        }else if(queryCategory){
-            products = await Product.find({
-                categories: {
-                    $in: [queryCategory],
-                },
-            });
+        if(querySort == 'asc'){
+            products = await Product.find().sort({ price: 1 });
+            console.log(products);
+        }else if(querySort == 'desc'){
+            products = await Product.find().sort({ price: -1 });
+
         }else{
             products = await Product.find();
         }
@@ -75,5 +75,41 @@ router.get("/", async (req, res) =>{
         res.status(500).json(error);
     }
 });
+
+router.get('/categories', async (req, res) =>{
+    let category = await Category.find();
+    res.status(200).json({
+        message: 'Categories retreived.',
+        categories: category
+    })
+});
+
+router.post('/create-category',async (req, res) =>{
+    const newCategory = new Category({
+        categoryType:req.body.categoryType,
+        img: req.body.img
+    });
+    try {
+        const savedCategory = await newCategory.save();
+        res.status(200).json(savedCategory);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+router.get('/category/:category', async(req, res)=>{
+    const rCategory = req.params.category;
+
+    try {
+        const products = await Product.find({ category: rCategory });
+        console.log(products);
+        res.status(200).json({
+            message: 'Products belong to this category retreived successfuly.',
+            products: products
+        })
+    } catch (error) {
+        res.status(500).json(error);
+    }
+})
 
 module.exports = router;
