@@ -1,20 +1,18 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import "./App.css";
 import Layout from "./Components/Layout/Layout";
 import Home from "./Components/Home/Home";
 import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
 import Notfound from "./Components/Notfound/Notfound";
 import Cart from "./Components/Cart/Cart";
+import Wishlist from "./Components/Wishlist/Wishlist";
+import Success from "./Components/Success/Success";
 import ProductList from "./Components/ProductList/ProductList";
-<<<<<<< HEAD
+import ProductDetails from "./Components/ProductDetails/ProductDetails";
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
+import ProtectedRoute2 from "./Components/ProtectedRoute2/ProtectedRoute2";
 import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
-
-// import ProductDetails from "./Components/ProductDetails/ProductDetails";
-=======
-import ProductDetails from "./Components/ProductDetails/ProductDetails";
->>>>>>> c45c27d (adding fetch single product)
 
 function App() {
   let [userData, setuserData] = useState(null);
@@ -53,20 +51,44 @@ function App() {
           element: <ProductList />,
         },
         {
-          path: "login",
-          element: <Login />,
-        },
-        {
-          path: "register",
-          element: <Register />,
-        },
-        {
-          path: "*",
-          element: <Notfound />,
+          path: "productList",
+          element: <ProductList />,
         },
         {
           path: "product/:id",
           element: <ProductDetails />,
+        },
+        {
+          path: "wishlist",
+          element: <Wishlist />,
+        },
+        {
+          path: "success",
+          element: (
+            <ProtectedRoute>
+              <Success />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "login",
+          element: (
+            <ProtectedRoute2>
+              <Login />
+            </ProtectedRoute2>
+          ),
+        },
+        {
+          path: "register",
+          element: (
+            <ProtectedRoute2>
+              <Register />
+            </ProtectedRoute2>
+          ),
+        },
+        {
+          path: "*",
+          element: <Notfound />,
         },
       ],
     },
